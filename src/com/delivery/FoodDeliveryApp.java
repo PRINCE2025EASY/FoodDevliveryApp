@@ -33,7 +33,7 @@ public class FoodDeliveryApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Smart Delivery System - Core Management Portal");
+        primaryStage.setTitle("Online Food Delivery System");
 
         // Seed initial menu data
         loadMockMenuData();
