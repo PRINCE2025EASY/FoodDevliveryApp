@@ -91,7 +91,7 @@ public class FoodDeliveryApp extends Application {
 
         HBox totalBox = new HBox();
         totalBox.setAlignment(Pos.CENTER_RIGHT);
-        lblTotal = new Label("Total Bill: $0.00");
+        lblTotal = new Label("Total Bill: ₵0.00");
         lblTotal.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
         totalBox.getChildren().add(lblTotal);
 
@@ -146,13 +146,12 @@ public class FoodDeliveryApp extends Application {
      * Seeds reference collection with sample operational metrics menu items.
      */
     private void loadMockMenuData() {
-        menuData.add(new MenuItem("M01", "Crispy Jollof Rice Complex Combo", 15.50, "Local Entrees"));
-        menuData.add(new MenuItem("M02", "Spiced Grilled Chicken Wings Platter", 12.00, "Appetizers"));
+        menuData.add(new MenuItem("M01", "Jollof Rice", 15.50, "Local Entrees"));
+        menuData.add(new MenuItem("M02", "Bank with Okro Soup", 12.00, "Appetizers"));
         menuData.add(new MenuItem("M03", "Charcoal Grilled Tilapia & Banku Trio", 18.00, "Traditional"));
         menuData.add(new MenuItem("M04", "Premium Veggie Avocado Toss Salad", 9.50, "Salads"));
         menuData.add(new MenuItem("M05", "Fresh Hand-Squeezed Ginger-Citrus Juice", 4.50, "Beverages"));
     }
-
     /**
      * Handles adding item selections securely to memory and updating layout trackers.
      */
