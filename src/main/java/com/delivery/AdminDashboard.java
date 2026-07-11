@@ -13,12 +13,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 /**
- * Admin-only screen showing every order placed by every customer, sourced
- * live from the shared {@link OrderStore}. Selecting an order in the table
- * displays its full generated invoice on the right-hand side.
- *
+ * Admin-only screen showing every order placed by every customer,
  * Reached only when a login through {@link LoginScreen} resolves to an
- * {@link AuthService.Role#ADMIN} account (e.g. the seeded "admin" / "admin123").
+ * {@link AuthService.Role#ADMIN} account (e.g. the seeded "prince" / "prince123").
  */
 public class AdminDashboard extends Application {
 
@@ -63,7 +60,7 @@ public class AdminDashboard extends Application {
         topRow.setAlignment(Pos.CENTER_RIGHT);
         topRow.getChildren().add(btnLogout);
 
-        Label lblTitle = new Label("PIO ONLINE FOOD DELIVERY COMPANY \u2014 ADMIN CONTROL PANEL");
+        Label lblTitle = new Label("PIO ONLINE FOOD DELIVERY SYSTEM \u2014 ADMIN CONTROL PANEL");
         lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         Label lblWelcome = new Label("Logged in as: " + loggedInUsername + " (Admin)");
         lblWelcome.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");

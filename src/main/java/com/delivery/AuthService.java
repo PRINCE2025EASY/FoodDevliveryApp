@@ -3,20 +3,6 @@ package com.delivery;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Lightweight authentication service backed entirely by an in-memory data
- * store (no database or file persistence). Credentials only live for the
- * lifetime of the running application; restarting the app resets the store
- * back to the seeded demo accounts.
- *
- * Each account also carries a {@link Role}, which {@link LoginScreen} uses to
- * decide whether a successful login should open the customer ordering screen
- * ({@link FoodDeliveryApp}) or the {@link AdminDashboard}.
- *
- * This class is intentionally simple (plain-text password comparison) to
- * match the scope of the rest of this demo project. It is NOT meant to be a
- * production-grade authentication implementation.
- */
 public final class AuthService {
 
     /** Determines which screen a successful login is routed to. */
@@ -31,11 +17,11 @@ public final class AuthService {
 
     static {
         // Seed a handful of demo accounts so the app is usable immediately.
-        credentialStore.put("admin", "admin123");
-        roleStore.put("admin", Role.ADMIN);
+        credentialStore.put("prince", "prince123");
+        roleStore.put("prince", Role.ADMIN);
 
-        credentialStore.put("customer", "customer123");
-        roleStore.put("customer", Role.CUSTOMER);
+        credentialStore.put("linda", "linda123");
+        roleStore.put("linda123", Role.CUSTOMER);
     }
 
     private AuthService() {

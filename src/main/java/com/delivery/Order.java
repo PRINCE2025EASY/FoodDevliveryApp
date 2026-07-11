@@ -6,12 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Represents a single placed order (and its generated invoice) captured at
- * checkout time in {@link FoodDeliveryApp}. Instances are immutable snapshots
- * so that an admin viewing the order later always sees exactly what was
- * ordered, even if menu prices change afterwards.
- */
 public class Order {
 
     private static final DateTimeFormatter TIMESTAMP_FORMAT =
@@ -61,7 +55,7 @@ public class Order {
     public LocalDateTime getPlacedAt() { return placedAt; }
     public String getFormattedTimestamp() { return placedAt.format(TIMESTAMP_FORMAT); }
 
-    /** Full invoice text, in the same style as the original checkout ledger output. */
+    //Full invoice
     public String toInvoiceString() {
         StringBuilder invoice = new StringBuilder();
         invoice.append("=== INVOICE DISPATCH SLIP ===\n");

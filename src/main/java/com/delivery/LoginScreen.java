@@ -15,15 +15,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Application entry screen: prompts for a username/password, validates the
- * credentials against {@link AuthService}'s in-memory data store, and — on
- * success — hands the primary Stage off to either {@link FoodDeliveryApp}
- * (CUSTOMER accounts) or {@link AdminDashboard} (ADMIN accounts), based on
- * the account's role.
- *
  * Demo accounts seeded by AuthService:
- *   admin    / admin123   -> Admin Dashboard
- *   customer / customer123 -> Customer ordering screen
+ *   prince    / prince123   -> Admin Dashboard
+ *   linda / linda123 -> Customer ordering screen
  */
 public class LoginScreen extends Application {
 
@@ -64,7 +58,7 @@ public class LoginScreen extends Application {
         grid.add(lblStatus, 0, 3, 2, 1);
 
         // Hint about seeded demo accounts
-        Label lblHint = new Label("Demo: admin/admin123 (Admin)  \u2022  customer/customer123 (Customer)");
+        Label lblHint = new Label("");
         lblHint.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 10px;");
         grid.add(lblHint, 0, 5, 2, 1);
 
@@ -94,7 +88,7 @@ public class LoginScreen extends Application {
 
     /**
      * Validates the submitted fields, then checks them against the in-memory
-     * credential store via {@link AuthService#authenticate(String, String)},
+     * credential store in AuthService#authenticate(String, String)},
      * and routes to the correct screen based on the account's role.
      */
     private void attemptLogin(Stage primaryStage, String username, String password) {
@@ -121,7 +115,6 @@ public class LoginScreen extends Application {
         }
     }
 
-    /** Hands the current Stage off to the customer-facing food delivery application. */
     private void openFoodDeliveryApp(Stage primaryStage, String username) {
         FoodDeliveryApp app = new FoodDeliveryApp(username);
         app.start(primaryStage);
@@ -133,12 +126,7 @@ public class LoginScreen extends Application {
         app.start(primaryStage);
     }
 
-    /**
-     * Small modal dialog for registering a brand-new account directly into
-     * the same in-memory data store used for login validation. Lets the
-     * person registering choose whether the new account is a Customer or
-     * Admin account.
-     */
+
     private void showSignUpDialog(Stage owner) {
         Stage dialog = new Stage();
         dialog.initOwner(owner);

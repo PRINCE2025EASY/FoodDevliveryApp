@@ -20,6 +20,6 @@ public class MenuItem {
     // Polymorphism: Overriding toString() for smooth UI listing rendering
     @Override
     public String toString() {
-        return String.format("%s (%s) - $%.2f", name, category, price);
+        return String.format("%s (%s) - GH\u20B5%.2f", name, category, price);
     }
 }

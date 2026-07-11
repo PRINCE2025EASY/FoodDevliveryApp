@@ -67,7 +67,7 @@ public class FoodDeliveryApp extends Application {
         topRow.setAlignment(Pos.CENTER_RIGHT);
         topRow.getChildren().add(btnLogout);
 
-        Label lblTitle = new Label("PIO ONLINE FOOD DELIVERY COMPANY");
+        Label lblTitle = new Label("PIO ONLINE FOOD DELIVERY SYSTEM");
         lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         Label lblWelcome = new Label("Welcome, " + loggedInUsername + "!");
         lblWelcome.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
@@ -113,7 +113,7 @@ public class FoodDeliveryApp extends Application {
 
         HBox totalBox = new HBox();
         totalBox.setAlignment(Pos.CENTER_RIGHT);
-        lblTotal = new Label("Total Bill: \u20B50.00");
+        lblTotal = new Label("Total Bill: GH\u20B50.00");
         lblTotal.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
         totalBox.getChildren().add(lblTotal);
 
@@ -169,10 +169,10 @@ public class FoodDeliveryApp extends Application {
      */
     private void loadMockMenuData() {
         menuData.add(new MenuItem("M01", "Jollof Rice", 15.50, "Local Entrees"));
-        menuData.add(new MenuItem("M02", "Banku with Okro Soup", 12.00, "Appetizers"));
-        menuData.add(new MenuItem("M03", "Charcoal Grilled Tilapia & Banku Trio", 18.00, "Traditional"));
-        menuData.add(new MenuItem("M04", "Premium Veggie Avocado Toss Salad", 9.50, "Salads"));
-        menuData.add(new MenuItem("M05", "Fresh Hand-Squeezed Ginger-Citrus Juice", 4.50, "Beverages"));
+        menuData.add(new MenuItem("M02", "Goat Light Soup", 12.00, "Appetizers"));
+        menuData.add(new MenuItem("M03", "Fufu with Palmnut Soup", 18.00, "Traditional"));
+        menuData.add(new MenuItem("M04", "Konkonte with Grandnut Soup", 9.50, "Traditional"));
+        menuData.add(new MenuItem("M05", "Rice Ball with Grandnut Soup", 4.50, "Foreing"));
     }
     /**
      * Handles adding item selections securely to memory and updating layout trackers.

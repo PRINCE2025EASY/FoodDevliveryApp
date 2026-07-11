@@ -1,0 +1,2 @@
+ORD-0001|linda|d5758912|prince|anaayirepioprince@gmail.com|Wa|M02~Goat Light Soup~12.0~Appetizers;M04~Konkonte with Grandnut Soup~9.5~Traditional;M04~Konkonte with Grandnut Soup~9.5~Traditional;M01~Jollof Rice~15.5~Local Entrees;M05~Rice Ball with Grandnut Soup~4.5~Foreing|51.0|2026-07-11T20:57:00.742445100
+ORD-0002|linda|8de2525e|Ama Linda|linda@gmail.com|street|M01~Jollof Rice~15.5~Local Entrees;M02~Goat Light Soup~12.0~Appetizers;M05~Rice Ball with Grandnut Soup~4.5~Foreing|32.0|2026-07-11T21:06:49.249498900

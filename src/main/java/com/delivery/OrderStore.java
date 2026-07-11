@@ -13,29 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Single shared source of truth for every order placed through
- * {@link FoodDeliveryApp}, regardless of which customer placed it. The
- * {@link AdminDashboard} reads from this same store to show every order from
- * every customer.
- *
- * Consistent with {@link AuthService}'s "no real database" demo scope, orders
- * are kept in memory (an {@link ObservableList} so the UI updates live) and
- * mirrored to a simple flat text file so that orders placed in one login
- * session are still visible to an admin who logs in during a later run of
- * the application.
- */
+   //Single source of truth for every order placed
+
 public final class OrderStore {
 
-    // NOTE: STORAGE_FILE must be declared (and therefore initialized) BEFORE
-    // INSTANCE. Static fields run their initializers in textual/declaration
-    // order, and creating INSTANCE immediately invokes the private
-    // constructor -> loadFromDisk() -> Files.exists(STORAGE_FILE). If
-    // STORAGE_FILE were declared after INSTANCE, it would still be null at
-    // that point, causing a NullPointerException inside the constructor
-    // (surfaced as ExceptionInInitializerError, then NoClassDefFoundError on
-    // every subsequent OrderStore.getInstance() call).
-    private static final Path STORAGE_FILE =
+        private static final Path STORAGE_FILE =
             Paths.get(System.getProperty("user.dir"), "orders_data.txt");
 
     private static final OrderStore INSTANCE = new OrderStore();
@@ -89,7 +71,7 @@ public final class OrderStore {
             int maxSeq = 0;
             List<Order> loaded = new ArrayList<>();
             for (String line : lines) {
-                if (line == null || line.isBlank()) {
+                if (line == null || line.isEmpty()) {
                     continue;
                 }
                 Order order = Order.fromRecordLine(line);
