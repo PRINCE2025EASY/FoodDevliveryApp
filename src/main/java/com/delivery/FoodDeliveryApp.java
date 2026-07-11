@@ -59,11 +59,19 @@ public class FoodDeliveryApp extends Application {
         VBox topBanner = new VBox(5);
         topBanner.setAlignment(Pos.CENTER);
         topBanner.setPadding(new Insets(0, 0, 15, 0));
+
+        Button btnLogout = new Button("Logout");
+        btnLogout.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnLogout.setOnAction(e -> handleLogout(primaryStage));
+        HBox topRow = new HBox();
+        topRow.setAlignment(Pos.CENTER_RIGHT);
+        topRow.getChildren().add(btnLogout);
+
         Label lblTitle = new Label("PIO ONLINE FOOD DELIVERY COMPANY");
         lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         Label lblWelcome = new Label("Welcome, " + loggedInUsername + "!");
         lblWelcome.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
-        topBanner.getChildren().addAll(lblTitle, lblWelcome);
+        topBanner.getChildren().addAll(topRow, lblTitle, lblWelcome);
         root.setTop(topBanner);
 
         // Center Split Section: Left Menu Selection, Right Shopping Cart Checkout
@@ -105,7 +113,7 @@ public class FoodDeliveryApp extends Application {
 
         HBox totalBox = new HBox();
         totalBox.setAlignment(Pos.CENTER_RIGHT);
-        lblTotal = new Label("Total Bill: ₵0.00");
+        lblTotal = new Label("Total Bill: \u20B50.00");
         lblTotal.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
         totalBox.getChildren().add(lblTotal);
 
@@ -151,7 +159,7 @@ public class FoodDeliveryApp extends Application {
         bottomBox.getChildren().addAll(lblConsoleHeader, txtOrderSummary);
         root.setBottom(bottomBox);
 
-        Scene scene = new Scene(root, 750, 580);
+        Scene scene = new Scene(root, 750, 620);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -161,7 +169,7 @@ public class FoodDeliveryApp extends Application {
      */
     private void loadMockMenuData() {
         menuData.add(new MenuItem("M01", "Jollof Rice", 15.50, "Local Entrees"));
-        menuData.add(new MenuItem("M02", "Bank with Okro Soup", 12.00, "Appetizers"));
+        menuData.add(new MenuItem("M02", "Banku with Okro Soup", 12.00, "Appetizers"));
         menuData.add(new MenuItem("M03", "Charcoal Grilled Tilapia & Banku Trio", 18.00, "Traditional"));
         menuData.add(new MenuItem("M04", "Premium Veggie Avocado Toss Salad", 9.50, "Salads"));
         menuData.add(new MenuItem("M05", "Fresh Hand-Squeezed Ginger-Citrus Juice", 4.50, "Beverages"));
@@ -173,9 +181,9 @@ public class FoodDeliveryApp extends Application {
         MenuItem selectedItem = menuListView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             currentCart.add(selectedItem);
-            cartDisplayList.add(selectedItem.getName() + " - $" + String.format("%.2f", selectedItem.getPrice()));
+            cartDisplayList.add(selectedItem.getName() + " - \u20B5" + String.format("%.2f", selectedItem.getPrice()));
             cartTotal += selectedItem.getPrice();
-            lblTotal.setText("Total Bill: $" + String.format("%.2f", cartTotal));
+            lblTotal.setText("Total Bill: \u20B5" + String.format("%.2f", cartTotal));
         } else {
             showAlert(Alert.AlertType.WARNING, "Item Selection Error", "Please pick an item from the product catalog matrix to add to the cart selection.");
         }
@@ -200,24 +208,14 @@ public class FoodDeliveryApp extends Application {
             // Polymorphism & Object Instantiation
             currentCustomer = new Customer(name, email, address);
 
-            // Print summary transaction details to log view window
-            StringBuilder invoice = new StringBuilder();
-            invoice.append("=== INVOICE DISPATCH SLIP ===\n");
-            invoice.append("Customer UUID ID: ").append(currentCustomer.getUserId()).append("\n");
-            invoice.append("Name Profile: ").append(currentCustomer.getName()).append("\n");
-            invoice.append("Shipping Delivery Destination: ").append(currentCustomer.getDeliveryAddress()).append("\n");
-            invoice.append("Designated Permissions context: ").append(currentCustomer.getRoleDescription()).append("\n");
-            invoice.append("--------------------------------------------------------------------\n");
-            invoice.append("Items Ordered Inventory Cluster:\n");
-            for (MenuItem item : currentCart) {
-                invoice.append(" -> ").append(item.toString()).append("\n");
-            }
-            invoice.append("--------------------------------------------------------------------\n");
-            invoice.append("Total Order Gross Invoice Computation Settlement Amount: $").append(String.format("%.2f", cartTotal)).append("\n");
-            invoice.append("Status: Order routing dispatched successfully to local hub system matrix!");
+            // Persist the order to the shared store so the Admin Dashboard can see it,
+            // then render the same invoice text into the local ledger output.
+            Order savedOrder = OrderStore.getInstance()
+                    .recordOrder(loggedInUsername, currentCustomer, currentCart, cartTotal);
 
-            txtOrderSummary.setText(invoice.toString());
-            showAlert(Alert.AlertType.INFORMATION, "Order Placed Successfully", "Your delivery process execution pipeline has started successfully.");
+            txtOrderSummary.setText(savedOrder.toInvoiceString());
+            showAlert(Alert.AlertType.INFORMATION, "Order Placed Successfully",
+                    "Your delivery process execution pipeline has started successfully.\nOrder ID: " + savedOrder.getOrderId());
 
             // Clear checkout configuration stack cleanly
             clearCartSession();
@@ -235,7 +233,12 @@ public class FoodDeliveryApp extends Application {
         currentCart.clear();
         cartDisplayList.clear();
         cartTotal = 0.0;
-        lblTotal.setText("Total Bill: $0.00");
+        lblTotal.setText("Total Bill: \u20B50.00");
+    }
+
+    private void handleLogout(Stage primaryStage) {
+        LoginScreen loginScreen = new LoginScreen();
+        loginScreen.start(primaryStage);
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

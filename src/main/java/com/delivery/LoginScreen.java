@@ -1,6 +1,7 @@
 package com.delivery;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,7 +17,13 @@ import javafx.stage.Stage;
 /**
  * Application entry screen: prompts for a username/password, validates the
  * credentials against {@link AuthService}'s in-memory data store, and — on
- * success — hands the primary Stage off to {@link FoodDeliveryApp}.
+ * success — hands the primary Stage off to either {@link FoodDeliveryApp}
+ * (CUSTOMER accounts) or {@link AdminDashboard} (ADMIN accounts), based on
+ * the account's role.
+ *
+ * Demo accounts seeded by AuthService:
+ *   admin    / admin123   -> Admin Dashboard
+ *   customer / customer123 -> Customer ordering screen
  */
 public class LoginScreen extends Application {
 
@@ -56,6 +63,11 @@ public class LoginScreen extends Application {
         lblStatus.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 11px;");
         grid.add(lblStatus, 0, 3, 2, 1);
 
+        // Hint about seeded demo accounts
+        Label lblHint = new Label("Demo: admin/admin123 (Admin)  \u2022  customer/customer123 (Customer)");
+        lblHint.setStyle("-fx-text-fill: #95a5a6; -fx-font-size: 10px;");
+        grid.add(lblHint, 0, 5, 2, 1);
+
         // Buttons
         Button loginBtn = new Button("Login");
         loginBtn.setDefaultButton(true);
@@ -74,7 +86,7 @@ public class LoginScreen extends Application {
         // Sign Up: open a small modal to register a brand-new account
         signUpBtn.setOnAction(e -> showSignUpDialog(primaryStage));
 
-        Scene scene = new Scene(grid, 360, 260);
+        Scene scene = new Scene(grid, 400, 300);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -82,7 +94,8 @@ public class LoginScreen extends Application {
 
     /**
      * Validates the submitted fields, then checks them against the in-memory
-     * credential store via {@link AuthService#authenticate(String, String)}.
+     * credential store via {@link AuthService#authenticate(String, String)},
+     * and routes to the correct screen based on the account's role.
      */
     private void attemptLogin(Stage primaryStage, String username, String password) {
         if (username == null || username.trim().isEmpty()) {
@@ -96,21 +109,35 @@ public class LoginScreen extends Application {
 
         if (AuthService.authenticate(username, password)) {
             lblStatus.setText("");
-            openFoodDeliveryApp(primaryStage, username.trim());
+            String trimmedUsername = username.trim();
+            AuthService.Role role = AuthService.getRole(trimmedUsername);
+            if (role == AuthService.Role.ADMIN) {
+                openAdminDashboard(primaryStage, trimmedUsername);
+            } else {
+                openFoodDeliveryApp(primaryStage, trimmedUsername);
+            }
         } else {
             lblStatus.setText("Invalid username or password.");
         }
     }
 
-    /** Hands the current Stage off to the main food delivery application. */
+    /** Hands the current Stage off to the customer-facing food delivery application. */
     private void openFoodDeliveryApp(Stage primaryStage, String username) {
         FoodDeliveryApp app = new FoodDeliveryApp(username);
         app.start(primaryStage);
     }
 
+    /** Hands the current Stage off to the admin dashboard. */
+    private void openAdminDashboard(Stage primaryStage, String username) {
+        AdminDashboard app = new AdminDashboard(username);
+        app.start(primaryStage);
+    }
+
     /**
      * Small modal dialog for registering a brand-new account directly into
-     * the same in-memory data store used for login validation.
+     * the same in-memory data store used for login validation. Lets the
+     * person registering choose whether the new account is a Customer or
+     * Admin account.
      */
     private void showSignUpDialog(Stage owner) {
         Stage dialog = new Stage();
@@ -137,6 +164,11 @@ public class LoginScreen extends Application {
         PasswordField confirmPwField = new PasswordField();
         confirmPwField.setPromptText("Re-enter password");
 
+        Label roleLabel = new Label("Account Type:");
+        ChoiceBox<AuthService.Role> roleChoice =
+                new ChoiceBox<>(FXCollections.observableArrayList(AuthService.Role.CUSTOMER, AuthService.Role.ADMIN));
+        roleChoice.setValue(AuthService.Role.CUSTOMER);
+
         Label statusLabel = new Label();
         statusLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 11px;");
 
@@ -161,12 +193,13 @@ public class LoginScreen extends Application {
                 statusLabel.setText("That username is already taken.");
                 return;
             }
-            if (AuthService.register(newUser, newPw)) {
+            if (AuthService.register(newUser, newPw, roleChoice.getValue())) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.initOwner(dialog);
                 alert.setTitle("Account Created");
                 alert.setHeaderText(null);
-                alert.setContentText("Account '" + newUser + "' created successfully. You can now log in.");
+                alert.setContentText("Account '" + newUser + "' created successfully as a "
+                        + roleChoice.getValue() + " account. You can now log in.");
                 alert.showAndWait();
                 dialog.close();
             } else {
@@ -180,10 +213,12 @@ public class LoginScreen extends Application {
         grid.add(newPwField, 1, 1);
         grid.add(confirmPwLabel, 0, 2);
         grid.add(confirmPwField, 1, 2);
-        grid.add(statusLabel, 0, 3, 2, 1);
-        grid.add(registerBtn, 1, 4);
+        grid.add(roleLabel, 0, 3);
+        grid.add(roleChoice, 1, 3);
+        grid.add(statusLabel, 0, 4, 2, 1);
+        grid.add(registerBtn, 1, 5);
 
-        Scene scene = new Scene(grid, 320, 240);
+        Scene scene = new Scene(grid, 320, 280);
         dialog.setScene(scene);
         dialog.showAndWait();
     }
