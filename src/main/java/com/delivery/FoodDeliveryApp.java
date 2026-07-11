@@ -1,7 +1,5 @@
 package com.delivery;
 
-import com.delivery.Customer;
-import com.delivery.MenuItem;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,15 +23,29 @@ public class FoodDeliveryApp extends Application {
     private Customer currentCustomer;
     private double cartTotal = 0.0;
 
+    // Username of the account that logged in via LoginScreen (defaults to
+    // "Guest" when this class is launched standalone, e.g. for testing).
+    private String loggedInUsername = "Guest";
+
     // UI Nodes
     private Label lblTotal;
     private ListView<MenuItem> menuListView;
     private ListView<String> cartListView;
     private TextArea txtOrderSummary;
 
+    public FoodDeliveryApp() {
+        // Default no-arg constructor, used when launched directly (no login).
+    }
+
+    public FoodDeliveryApp(String loggedInUsername) {
+        if (loggedInUsername != null && !loggedInUsername.isEmpty()) {
+            this.loggedInUsername = loggedInUsername;
+        }
+    }
+
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Online Food Delivery System");
+        primaryStage.setTitle("Online Food Delivery System - Logged in as " + loggedInUsername);
 
         // Seed initial menu data
         loadMockMenuData();
@@ -49,7 +61,9 @@ public class FoodDeliveryApp extends Application {
         topBanner.setPadding(new Insets(0, 0, 15, 0));
         Label lblTitle = new Label("PIO ONLINE FOOD DELIVERY COMPANY");
         lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-        topBanner.getChildren().add(lblTitle);
+        Label lblWelcome = new Label("Welcome, " + loggedInUsername + "!");
+        lblWelcome.setStyle("-fx-font-size: 12px; -fx-text-fill: #7f8c8d;");
+        topBanner.getChildren().addAll(lblTitle, lblWelcome);
         root.setTop(topBanner);
 
         // Center Split Section: Left Menu Selection, Right Shopping Cart Checkout
